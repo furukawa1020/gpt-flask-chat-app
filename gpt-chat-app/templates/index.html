@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊びのプラン提案アプリ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="search-bar">
+            <input type="text" id="userInput" placeholder="どんな遊びをしたいですか？">
+            <button onclick="submitPlanRequest()">提案を受ける</button>
+        </div>
+    </header>
+
+    <main>
+        <div id="planContainer" class="grid-container">
+            <!-- プラン提案結果がここに表示されます -->
+        </div>
+    </main>
+
+    <nav>
+        <ul class="bottom-nav">
+            <li><a href="#home">ホーム</a></li>
+            <li><a href="#search">検索</a></li>
+            <li><a href="#post">投稿</a></li>
+            <li><a href="#profile">マイページ</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        async function submitPlanRequest() {
+            const userInput = document.getElementById('userInput').value;
+            const response = await fetch('/get_plan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({input: userInput})
+            });
+            const data = await response.json();
+            displayPlan(data.response);
+        }
+
+        function displayPlan(plan) {
+            const planContainer = document.getElementById('planContainer');
+            planContainer.innerHTML = `<div class="plan-card"><p>${plan}</p></div>`;
+        }
+    </script>
+</body>
+</html>
